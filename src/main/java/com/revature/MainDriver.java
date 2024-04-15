@@ -132,6 +132,7 @@ public class MainDriver {
         newUser.setPassword(password);
 
         System.out.println(newUser);
+        // TODO add register implementation
 
     }
 
