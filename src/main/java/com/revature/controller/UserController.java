@@ -1,9 +1,12 @@
 package com.revature.controller;
 
+import com.revature.MainDriver;
 import com.revature.exceptions.UserFailException;
 import com.revature.models.User;
 import com.revature.models.UsernamePasswordAuthentication;
 import com.revature.service.UserService;
+
+import java.sql.SQLException;
 
 
 public class UserController {
@@ -14,17 +17,19 @@ public class UserController {
 		this.userService = userService;
 	}
 
-	public User authenticate(UsernamePasswordAuthentication loginRequestData) {
+	public void authenticate(UsernamePasswordAuthentication loginRequestData) {
 		// TODO: implement
-		try {
-			User currentUser = userService.authenticate(loginRequestData);
-			return currentUser;
-		} catch (UserFailException e) {
-			System.out.println(e.getMessage());
-			return null;
+		// TODO: handle logged in user
+		User currentUser = userService.authenticate(loginRequestData);
+		if (currentUser.getUsername().isEmpty()) {
+			System.out.println("Invalid username/password combination");
+			return;
 		}
+		System.out.printf("Welcome back %s!", currentUser.getUsername());
+		MainDriver.loggedInUser = currentUser;
 
-	}
+
+    }
 
 	public User register(User registerRequestData) {
 		// TODO: implement
@@ -34,7 +39,7 @@ public class UserController {
 			return registeredUser;
 		} catch (UserFailException e) {
 			System.out.println(e.getMessage());
-			return null;
+			return new User();
 		}
 
 	}

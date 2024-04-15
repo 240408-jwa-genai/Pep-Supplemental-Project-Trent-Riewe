@@ -19,6 +19,14 @@ public class UsernamePasswordAuthentication {
     }
 
     @Override
+    public String toString() {
+        return "UsernamePasswordAuthentication{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
@@ -39,9 +47,5 @@ public class UsernamePasswordAuthentication {
             return false;
         return true;
     }
-    @Override
-    public String toString() {
-        return "UsernamePasswordAuthentication [username=" + username + "]";
-    }
-    
+
 }

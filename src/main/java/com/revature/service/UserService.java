@@ -5,6 +5,8 @@ import com.revature.models.User;
 import com.revature.models.UsernamePasswordAuthentication;
 import com.revature.repository.UserDao;
 
+import java.sql.SQLException;
+
 public class UserService {
 
 	private UserDao dao;
@@ -16,11 +18,14 @@ public class UserService {
 	public User authenticate(UsernamePasswordAuthentication loginRequestData) {
 		// TODO: implement
 		User possibleUser = dao.getUserByUsername(loginRequestData.getUsername());
+
+		// db error
 		if (possibleUser == null) {
-			throw new UserFailException("User not found.");
+			return possibleUser;
 		}
-		if (!possibleUser.getPassword().equals(loginRequestData.getPassword())) {
-			throw new UserFailException("Passwords do not match.");
+		// bad password
+		if (!loginRequestData.getPassword().equals(possibleUser.getPassword())) {
+			return new User();
 		}
 
 		return possibleUser;
@@ -59,7 +64,10 @@ public class UserService {
 	}
 
 	private boolean usernameIsUsed(String username) {
+
 		User potentialDuplicate = dao.getUserByUsername(username);
-        return potentialDuplicate.getUsername() == null;
+		return potentialDuplicate.getUsername() == null;
+
+
     }
 }

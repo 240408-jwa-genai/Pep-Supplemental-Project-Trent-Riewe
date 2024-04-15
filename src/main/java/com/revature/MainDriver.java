@@ -15,80 +15,124 @@ public class MainDriver {
     public static UserService userService = new UserService(userDao);
     public static UserController userController = new UserController(userService);
 
-    public static User loggedInUser = null;
+    public static User loggedInUser = new User();
+    public static boolean activeUser = true;
 
     public static void main(String[] args) {
         // TODO: implement main method to initialize layers and run the application
         try (Scanner in = new Scanner(System.in);) {
 
-            boolean activeUser = true;
+
             while (activeUser) {
                 
-                if (loggedInUser != null) {
-                    loggedInScreen();
+                if (loggedInUser.getUsername() == null) {
+                    welcomeScreen(in);
                 } else {
-                   welcomeScreen(in);
+                    loggedInScreen(in);
                 }
             }
         }
     }
 
-    private static void loggedInScreen() {
+    private static void loggedInScreen(Scanner in) {
+        printLoggedInOptions();
+        String command = in.nextLine();
+        switch (command) {
+            case "1":
+                System.out.println("View Planets");
+                break;
+            case "2":
+                System.out.println("Add Planet");
+                break;
+            case "3":
+                System.out.println("Remove Planet");
+                break;
+            case "4":
+                System.out.println("View Moons");
+                break;
+            case "5":
+                System.out.println("Add Moon");
+                break;
+            case "6":
+                System.out.println("Remove Moon");
+                break;
+            case "7":
+                System.out.println("Logout");
+                break;
+            case "q":
+                System.out.println("Thank you for using our program.");
+                System.out.println("Have a nice day!");
+                activeUser = !activeUser;
+                break;
+            default:
+                System.out.println("Invalid Input: Choose 1, 2, or q");
+        }
+
+    }
+
+    private static void printLoggedInOptions() {
+        System.out.println("What would you like to do today?");
+        System.out.println("1: View Planets");
+        System.out.println("2: Add a new Planet");
+        System.out.println("3: Remove a Planet");
+        System.out.println("4: View Moons");
+        System.out.println("5: Add a new Moon");
+        System.out.println("6: Remove a Moon");
+        System.out.println("7: Logout");
     }
 
     private static void welcomeScreen(Scanner in) {
         System.out.println("Welcome to the Panetarium");
         System.out.println("Would you like to: 1: Login, or 2: Register");
-        int command = in.nextInt();
+        System.out.println("You may also press 'q' to quit");
+        String command = in.nextLine();
         switch (command) {
-            case 0:
-                break;
-            case 1:
+            case "1":
                 login(in);
                 break;
-            case 2:
-                System.out.println("Register");
+            case "2":
                 register(in);
                 break;
+            case "q":
+                System.out.println("Thank you for using our program.");
+                System.out.println("Have a nice day!");
+                activeUser = !activeUser;
+                break;
             default:
-                System.out.println("Invalid Input: Choose 1 or 2");
+                System.out.println("Invalid Input: Choose 1, 2, or q");
         }
     }
 
     private static void login(Scanner in) {
-        System.out.println("Please entry your username and password to login");
+        System.out.println("Please enter your username and password to login");
         UsernamePasswordAuthentication userAuth = new UsernamePasswordAuthentication();
         System.out.print("Username: ");
-        userAuth.setUsername(in.nextLine());
+        String username = in.nextLine();
+        userAuth.setUsername(username);
+
         System.out.print("Password: ");
         String password = in.nextLine();
+        userAuth.setPassword(password);
+        userController.authenticate(userAuth);
 
     }
 
     private static void register(Scanner in) {
-        boolean registered = false;
-        while (!registered) {
-            System.out.println("Thank you for deciding to register with our app.");
-            System.out.println("Please enter the username and password you would like to use");
-            System.out.println("The username must be unique, and both username and password must " +
-                    "be shorter than 30 characters");
-            System.out.print("Username: ");
-            String username = in.nextLine();
+        System.out.println("Thank you for deciding to register with our app.");
+        System.out.println("Please enter the username and password you would like to use");
+        System.out.println("The username must be unique, and both username and password must " +
+                "be shorter than 30 characters");
+        System.out.print("Username: ");
+        String username = in.nextLine();
 
-            System.out.print("Password: ");
-            String password = in.nextLine();
-            User newUser = new User();
-            newUser.setUsername(username);
-            newUser.setPassword(password);
-            try {
-                loggedInUser = userController.register(newUser);
-                registered = true;
+        System.out.print("Password: ");
+        String password = in.nextLine();
+        User newUser = new User();
+        newUser.setUsername(username);
+        newUser.setPassword(password);
 
-            } catch (UserFailException e) {
-                System.out.println(e);
+        System.out.println(newUser);
 
-            }
-        }
     }
 
 }

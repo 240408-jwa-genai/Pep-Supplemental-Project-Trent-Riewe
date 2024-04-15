@@ -9,10 +9,9 @@ import java.sql.*;
 
 public class UserDao {
     
-    public User getUserByUsername(String username){
+    public User getUserByUsername(String username) {
 
         try (Connection connection = ConnectionUtil.createConnection()){
-            // create sql we will execute
             String sql = "select * from users where username = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, username);
@@ -32,8 +31,6 @@ public class UserDao {
     }
 
     public User createUser(User registerRequest) {
-        // TODO: implement
-        // send sql query
 
         try (Connection connection = ConnectionUtil.createConnection()){
             // create sql we will execute
