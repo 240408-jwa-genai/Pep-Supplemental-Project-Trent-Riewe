@@ -34,9 +34,21 @@ public class PlanetDao {
 
 	public Planet getPlanetByName(String planetName) {
 		// TODO: implement
+		try (Connection connection = ConnectionUtil.createConnection()) {
+			String sql = "select * from planets where name = ?";
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setString(1, planetName);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				return makePlanet(rs);
+			}
 
+			return new Planet();
 
-		return null;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	public Planet getPlanetById(int planetId) {
@@ -66,6 +78,11 @@ public class PlanetDao {
 		PlanetDao dao = new PlanetDao();
 		List<Planet> planets = dao.getAllPlanets();
 		System.out.println(planets);
+
+		Planet getByName1 = dao.getPlanetByName("urath");
+		System.out.println(getByName1);
+		Planet getByName2 = dao.getPlanetByName("will return empty planet");
+		System.out.println(getByName2);
 	}
 
 }
