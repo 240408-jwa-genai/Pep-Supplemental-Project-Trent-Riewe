@@ -13,7 +13,7 @@ import com.revature.utilities.ConnectionUtil;
 public class PlanetDao {
     
     public List<Planet> getAllPlanets() {
-		// TODO: implement
+
 		try (Connection connection = ConnectionUtil.createConnection()) {
 			String sql = "select * from planets";
 			PreparedStatement ps = connection.prepareStatement(sql);
@@ -33,7 +33,7 @@ public class PlanetDao {
 	}
 
 	public Planet getPlanetByName(String planetName) {
-		// TODO: implement
+
 		try (Connection connection = ConnectionUtil.createConnection()) {
 			String sql = "select * from planets where name = ?";
 			PreparedStatement ps = connection.prepareStatement(sql);
@@ -52,8 +52,22 @@ public class PlanetDao {
 	}
 
 	public Planet getPlanetById(int planetId) {
-		// TODO: implement
-		return null;
+
+		try (Connection connection = ConnectionUtil.createConnection()) {
+			String sql = "select * from planets where id = ?";
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setInt(1, planetId);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				return makePlanet(rs);
+			}
+
+			return new Planet();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	public Planet createPlanet(Planet p) {
@@ -83,6 +97,11 @@ public class PlanetDao {
 		System.out.println(getByName1);
 		Planet getByName2 = dao.getPlanetByName("will return empty planet");
 		System.out.println(getByName2);
+
+		Planet getById1 = dao.getPlanetById(1);
+		System.out.println(getById1);
+		Planet getById2 = dao.getPlanetById(-1);
+		System.out.println(getById2);
 	}
 
 }
