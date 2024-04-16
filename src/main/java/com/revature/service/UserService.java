@@ -40,10 +40,6 @@ public class UserService {
 			throw new UserFailException(message);
 		}
 
-//		UsernamePasswordAuthentication newUserAuth = new UsernamePasswordAuthentication();
-//		newUserAuth.setPassword(registerRequestData.getPassword());
-//		newUserAuth.setUsername(registerRequestData.getUsername());
-
         return dao.createUser(registerRequestData);
 	}
 
@@ -66,7 +62,7 @@ public class UserService {
 	private boolean usernameIsUsed(String username) {
 
 		User potentialDuplicate = dao.getUserByUsername(username);
-		return potentialDuplicate.getUsername() == null;
+		return potentialDuplicate.getUsername() != null;
 
 
     }

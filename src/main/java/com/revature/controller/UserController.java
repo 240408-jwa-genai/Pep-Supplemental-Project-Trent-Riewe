@@ -31,21 +31,25 @@ public class UserController {
 
     }
 
-	public User register(User registerRequestData) {
-		// TODO: implement
-//		throw new UserFailException("Testing try catch");
+	public void register(User registerRequestData) {
+
 		try {
 			User registeredUser = userService.register(registerRequestData);
-			return registeredUser;
+			System.out.println("Thank you for registering " + registeredUser.getUsername() + "!");
+			System.out.println("Please login using your username and password.");
+
 		} catch (UserFailException e) {
 			System.out.println(e.getMessage());
-			return new User();
+
 		}
 
 	}
 
 	public void logout() {
 		// TODO: implement
+		MainDriver.loggedInUser = new User();
+		System.out.println("Thank you for using our app.");
+		System.out.println("Have a nice day");
 	}
 	
 	public boolean checkAuthorization(int userId) {	

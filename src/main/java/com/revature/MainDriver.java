@@ -131,8 +131,8 @@ public class MainDriver {
         newUser.setUsername(username);
         newUser.setPassword(password);
 
-        System.out.println(newUser);
         // TODO add register implementation
+        userController.register(newUser);
 
     }
 

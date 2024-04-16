@@ -22,3 +22,5 @@ create table if not exists moons(
 );
 
 insert into users (username, password) values ('myUser', 'myPass');
+
+SELECT * from users;
