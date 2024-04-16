@@ -5,6 +5,7 @@ import java.util.Scanner;
 import com.revature.controller.PlanetController;
 import com.revature.controller.UserController;
 import com.revature.exceptions.UserFailException;
+import com.revature.models.Planet;
 import com.revature.models.User;
 import com.revature.models.UsernamePasswordAuthentication;
 import com.revature.repository.PlanetDao;
@@ -52,7 +53,7 @@ public class MainDriver {
                 in.nextLine();
                 break;
             case "2":
-                System.out.println("Add Planet");
+                createPlanet(in);
                 break;
             case "3":
                 System.out.println("Remove Planet");
@@ -78,6 +79,14 @@ public class MainDriver {
                 System.out.println("Invalid Input: Choose 1, 2, or q");
         }
 
+    }
+
+    private static void createPlanet(Scanner in) {
+        System.out.println("Add Planet");
+        System.out.println("Please enter the planet's name");
+        Planet potentialPlanet = new Planet();
+        potentialPlanet.setName(in.nextLine());
+        planetController.createPlanet(loggedInUser.getId(), potentialPlanet);
     }
 
     private static void printLoggedInOptions() {

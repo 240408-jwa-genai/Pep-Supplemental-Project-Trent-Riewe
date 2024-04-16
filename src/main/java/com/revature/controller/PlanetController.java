@@ -1,6 +1,8 @@
 package com.revature.controller;
 
+import com.revature.exceptions.UserFailException;
 import com.revature.models.Planet;
+import com.revature.models.User;
 import com.revature.service.PlanetService;
 
 import java.util.List;
@@ -34,6 +36,14 @@ public class PlanetController {
 
 	public void createPlanet(int currentUserId, Planet planet) {
 		// TODO: implement
+		try {
+			Planet newPlanet = planetService.createPlanet(currentUserId, planet);
+			System.out.println("Thank you for adding " + newPlanet.getName() + " to our database!");
+
+		} catch (UserFailException e) {
+			System.out.println(e.getMessage());
+
+		}
 	}
 
 	public void deletePlanet(int currentUserId, int id) {

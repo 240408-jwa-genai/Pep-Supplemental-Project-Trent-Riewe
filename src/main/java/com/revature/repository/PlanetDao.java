@@ -1,9 +1,6 @@
 package com.revature.repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,8 +68,26 @@ public class PlanetDao {
 	}
 
 	public Planet createPlanet(Planet p) {
-		// TODO: implement
-		return null;
+
+		try (Connection connection = ConnectionUtil.createConnection()) {
+			String sql = "insert into planets (name, ownerId) values (?,?)";
+			PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			ps.setString(1, p.getName());
+			ps.setInt(2, p.getOwnerId());
+			ps.executeUpdate();
+			ResultSet rs = ps.getGeneratedKeys();
+			if (rs.next()) {
+				p.setId(rs.getInt(1));
+
+			}
+
+			return p;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+
 	}
 
 	public boolean deletePlanetById(int planetId) {

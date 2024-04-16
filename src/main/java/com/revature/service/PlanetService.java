@@ -3,7 +3,8 @@ package com.revature.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.revature.controller.UserController;
+import com.revature.exceptions.PlanetFailException;
+import com.revature.exceptions.UserFailException;
 import com.revature.models.Planet;
 import com.revature.repository.PlanetDao;
 
@@ -36,11 +37,33 @@ public class PlanetService {
 
 	public Planet createPlanet(int ownerId, Planet planet) {
 		// TODO Auto-generated method stub
-		return null;
+		String message = validatePlanet(ownerId, planet);
+		if (!message.isEmpty()) {
+			throw new PlanetFailException(message);
+		}
+		planet.setOwnerId(ownerId);
+		return dao.createPlanet(planet);
+
 	}
 
 	public boolean deletePlanetById(int planetId) {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	private String validatePlanet(int ownerId, Planet planet) {
+		String message = "";
+		if (planet.getName().length() > 30) {
+			message += "Planet name is too long \n";
+		}
+		if (planetNameNotUnique(ownerId, planet)) {
+			message += "Planets must have unique names \n";
+		}
+		return message;
+	}
+
+	private boolean planetNameNotUnique(int ownerId, Planet planet) {
+		return getPlanetByName(ownerId, planet.getName()).getName() != null;
+	}
+
 }
