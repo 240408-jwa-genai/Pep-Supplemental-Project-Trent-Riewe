@@ -53,8 +53,8 @@ public class UserController {
 	}
 	
 	public boolean checkAuthorization(int userId) {	
-		// TODO: implement
-		return false;
+
+		return MainDriver.loggedInUser.getId() == userId;
 	}
 
 }

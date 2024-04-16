@@ -1,7 +1,9 @@
 package com.revature.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.revature.controller.UserController;
 import com.revature.models.Planet;
 import com.revature.repository.PlanetDao;
 
@@ -13,19 +15,23 @@ public class PlanetService {
 		this.dao = dao;
 	}
 
-	public List<Planet> getAllPlanets() {
+	public List<Planet> getAllPlanets(int currentUserId) {
 		// TODO Auto-generated method stub
-		return null;
+		return dao.getAllPlanets().stream()
+				.filter(planet -> planet.getOwnerId() == currentUserId)
+				.collect(Collectors.toList());
 	}
 
 	public Planet getPlanetByName(int ownerId, String planetName) {
-		// TODO Auto-generated method stub
-		return null;
+
+		Planet possiblePlanet = dao.getPlanetByName(planetName);
+		return ownerId == possiblePlanet.getOwnerId() ? possiblePlanet : new Planet();
 	}
 
 	public Planet getPlanetById(int ownerId, int planetId) {
-		// TODO Auto-generated method stub
-		return null;
+
+		Planet possiblePlanet = dao.getPlanetById(planetId);
+		return ownerId == possiblePlanet.getOwnerId() ? possiblePlanet : new Planet();
 	}
 
 	public Planet createPlanet(int ownerId, Planet planet) {

@@ -2,11 +2,14 @@ package com.revature;
 
 import java.util.Scanner;
 
+import com.revature.controller.PlanetController;
 import com.revature.controller.UserController;
 import com.revature.exceptions.UserFailException;
 import com.revature.models.User;
 import com.revature.models.UsernamePasswordAuthentication;
+import com.revature.repository.PlanetDao;
 import com.revature.repository.UserDao;
+import com.revature.service.PlanetService;
 import com.revature.service.UserService;
 
 public class MainDriver {
@@ -14,6 +17,10 @@ public class MainDriver {
     public static UserDao userDao = new UserDao();
     public static UserService userService = new UserService(userDao);
     public static UserController userController = new UserController(userService);
+
+    public static PlanetDao planetDao = new PlanetDao();
+    public static PlanetService planetService = new PlanetService(planetDao);
+    public static PlanetController planetController = new PlanetController(planetService);
 
     public static User loggedInUser = new User();
     public static boolean activeUser = true;
@@ -40,6 +47,9 @@ public class MainDriver {
         switch (command) {
             case "1":
                 System.out.println("View Planets");
+                planetController.getAllPlanets(loggedInUser.getId());
+                System.out.println("Press enter when ready to move on.");
+                in.nextLine();
                 break;
             case "2":
                 System.out.println("Add Planet");
