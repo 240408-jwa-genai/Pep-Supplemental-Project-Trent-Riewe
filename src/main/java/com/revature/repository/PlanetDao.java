@@ -92,7 +92,18 @@ public class PlanetDao {
 
 	public boolean deletePlanetById(int planetId) {
 		// TODO: implement
-		return false;
+		try (Connection connection = ConnectionUtil.createConnection()){
+			// create sql we will execute
+			String sql = "delete from planets where id = ?";
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setInt(1, planetId);
+			int val = ps.executeUpdate();
+			return val == 1;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	private Planet makePlanet(ResultSet rs) throws SQLException {
@@ -105,18 +116,28 @@ public class PlanetDao {
 
 	public static void main(String[] args) {
 		PlanetDao dao = new PlanetDao();
+		// get all planets
 		List<Planet> planets = dao.getAllPlanets();
 		System.out.println(planets);
-
+		// get planet by name
 		Planet getByName1 = dao.getPlanetByName("urath");
 		System.out.println(getByName1);
 		Planet getByName2 = dao.getPlanetByName("will return empty planet");
 		System.out.println(getByName2);
-
+		// get planet by id
 		Planet getById1 = dao.getPlanetById(1);
 		System.out.println(getById1);
 		Planet getById2 = dao.getPlanetById(-1);
 		System.out.println(getById2);
+		// create planet
+		Planet p = new Planet();
+		p.setName("Grymalkin");
+		p.setOwnerId(1);
+		p = dao.createPlanet(p);
+		System.out.println(p);
+		// delete planet
+		System.out.println(dao.deletePlanetById(2));
+
 	}
 
 }

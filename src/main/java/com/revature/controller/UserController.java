@@ -26,7 +26,7 @@ public class UserController {
 			return;
 		}
 		System.out.printf("Welcome back %s!", currentUser.getUsername());
-		MainDriver.loggedInUser = currentUser;
+		MainDriver.loggedInUser = currentUser.getId();
 
 
     }
@@ -47,14 +47,14 @@ public class UserController {
 
 	public void logout() {
 		// TODO: implement
-		MainDriver.loggedInUser = new User();
+		MainDriver.loggedInUser = -1;
 		System.out.println("Thank you for using our app.");
 		System.out.println("Have a nice day");
 	}
 	
 	public boolean checkAuthorization(int userId) {	
 
-		return MainDriver.loggedInUser.getId() == userId;
+		return MainDriver.loggedInUser == userId;
 	}
 
 }

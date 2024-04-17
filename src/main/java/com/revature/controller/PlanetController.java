@@ -19,7 +19,9 @@ public class PlanetController {
 	public void getAllPlanets(int currentUserId) {
 		// TODO: implement
 		List<Planet> planets = planetService.getAllPlanets(currentUserId);
-		System.out.println(planets);
+		for (Planet planet : planets) {
+			System.out.printf("id: %d, name: %s \n", planet.getId(), planet.getName());
+		}
 	}
 
 	public void getPlanetByName(int currentUserId, String name) {
@@ -48,5 +50,13 @@ public class PlanetController {
 
 	public void deletePlanet(int currentUserId, int id) {
 		// TODO: implement
+		Planet planetToDelete = planetService.getPlanetById(currentUserId, id);
+		if (planetToDelete.getName() == null) {
+			System.out.println("You cannot delete planets that do not belong to you or do not exist");
+			return;
+		}
+		if (planetService.deletePlanetById(id)) {
+			System.out.println("Planet with id: " + id + " successfully deleted");
+		}
 	}
 }

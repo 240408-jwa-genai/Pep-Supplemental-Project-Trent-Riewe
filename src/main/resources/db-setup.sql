@@ -24,3 +24,7 @@ create table if not exists moons(
 insert into users (username, password) values ('myUser', 'myPass');
 
 SELECT * from users;
+
+INSERT INTO planets (name, ownerId) VALUES ('urath', 1);
+SELECT * FROM planets;
+DELETE FROM planets WHERE ownerId = 0;

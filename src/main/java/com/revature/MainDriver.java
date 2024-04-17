@@ -23,7 +23,7 @@ public class MainDriver {
     public static PlanetService planetService = new PlanetService(planetDao);
     public static PlanetController planetController = new PlanetController(planetService);
 
-    public static User loggedInUser = new User();
+    public static int loggedInUser = -1;
     public static boolean activeUser = true;
 
     public static void main(String[] args) {
@@ -33,7 +33,7 @@ public class MainDriver {
 
             while (activeUser) {
                 
-                if (loggedInUser.getUsername() == null) {
+                if (loggedInUser < 0) {
                     welcomeScreen(in);
                 } else {
                     loggedInScreen(in);
@@ -47,16 +47,13 @@ public class MainDriver {
         String command = in.nextLine();
         switch (command) {
             case "1":
-                System.out.println("View Planets");
-                planetController.getAllPlanets(loggedInUser.getId());
-                System.out.println("Press enter when ready to move on.");
-                in.nextLine();
+                viewPlanets(in);
                 break;
             case "2":
                 createPlanet(in);
                 break;
             case "3":
-                System.out.println("Remove Planet");
+                deletePlanet(in);
                 break;
             case "4":
                 System.out.println("View Moons");
@@ -69,6 +66,7 @@ public class MainDriver {
                 break;
             case "7":
                 System.out.println("Logout");
+                userController.logout();
                 break;
             case "q":
                 System.out.println("Thank you for using our program.");
@@ -81,12 +79,36 @@ public class MainDriver {
 
     }
 
+    private static void viewPlanets(Scanner in) {
+        System.out.println("View Planets");
+        planetController.getAllPlanets(loggedInUser);
+        System.out.println("Press enter when ready to move on.");
+        in.nextLine();
+    }
+
+    private static void deletePlanet(Scanner in) {
+        System.out.println("If you want to view the planets you own press 'v'.");
+        System.out.println("Otherwise enter the id of the planet you would like to delete.");
+        System.out.println("You can also press 'b' to go back");
+        String command = in.nextLine();
+        switch (command) {
+            case "v":
+                planetController.getAllPlanets(loggedInUser);
+                deletePlanet(in);
+                break;
+            case "b":
+                return;
+            default:
+                planetController.deletePlanet(loggedInUser, Integer.valueOf(command));
+        }
+    }
+
     private static void createPlanet(Scanner in) {
         System.out.println("Add Planet");
         System.out.println("Please enter the planet's name");
         Planet potentialPlanet = new Planet();
         potentialPlanet.setName(in.nextLine());
-        planetController.createPlanet(loggedInUser.getId(), potentialPlanet);
+        planetController.createPlanet(loggedInUser, potentialPlanet);
     }
 
     private static void printLoggedInOptions() {
